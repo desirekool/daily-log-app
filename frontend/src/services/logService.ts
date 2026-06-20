@@ -13,30 +13,36 @@ export interface LogReq {
 }
 
 export const getLogs = async (planId: number) => {
-  const response = await api.get(`/api/plans/${planId}/logs`);
-  return response.data;
+  const res = await api(`/api/plans/${planId}/logs`);
+  return res.json();
 };
 
 export const getLogsBySection = async (planId: number, sectionId: number) => {
-  const response = await api.get(`/api/plans/${planId}/sections/${sectionId}/logs`);
-  return response.data;
+  const res = await api(`/api/plans/${planId}/sections/${sectionId}/logs`);
+  return res.json();
 };
 
 export const getLog = async (planId: number, logId: number) => {
-  const response = await api.get(`/api/plans/${planId}/logs/${logId}`);
-  return response.data;
+  const res = await api(`/api/plans/${planId}/logs/${logId}`);
+  return res.json();
 };
 
 export const createLog = async (planId: number, data: LogReq) => {
-  const response = await api.post(`/api/plans/${planId}/logs`, data);
-  return response.data;
+  const res = await api(`/api/plans/${planId}/logs`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return res.json();
 };
 
 export const updateLog = async (planId: number, logId: number, data: Partial<LogReq>) => {
-  const response = await api.put(`/api/plans/${planId}/logs/${logId}`, data);
-  return response.data;
+  const res = await api(`/api/plans/${planId}/logs/${logId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+  return res.json();
 };
 
 export const deleteLog = async (planId: number, logId: number) => {
-  await api.delete(`/api/plans/${planId}/logs/${logId}`);
+  await api(`/api/plans/${planId}/logs/${logId}`, { method: 'DELETE' });
 };

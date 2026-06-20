@@ -2,31 +2,59 @@
 
 A full-stack application for tracking daily progress across multiple plans with a 4-phase lifecycle (Setup → Hydrate → Execute → Review).
 
+## About
+
+This is a proof of concept implementation of a client-server application. I had the following choices when choosing the architecture:
+
+1. PHP using Laravel (to learn Laravel) — decided against as I need more time and am currently refreshing my Spring Boot skills. Laravel would be a distraction for now.
+2. Next.js — as much as I like Next.js, the implementation would have taught me nothing new.
+3. Using a JS frontend with a backend implemented in:
+   1. Express / Nest.js
+   2. Go
+   3. Spring Boot
+
+I decided to use React and Spring Boot based on my current learning plans. And yes, the project is the result of managing printed plan sheets and losing them.
+
+### Project Goals
+
+1. implement a backend to handle a to-do list
+2. implement a REST API and communicate with it using basic authentication (security was not a focus)
+3. implement a frontend to communicate with the API
+4. CRUD operations
+5. read and write Markdown files
+
+### Project Review
+
+The project turned out better than expected. Points 1–4 exceeded my expectations. Excluding security was a good decision — it allowed me to concentrate on other important issues.
+
+But as always, there are some issues. The choice of Markdown as a medium was not a good idea. Markdown is a good medium for, say, blogs where we want to convert user text into HTML and display it. It also has some very good table handling, which led to using it in the first place.
+
+It didn't help that I decided to use the MDXEditor package. It is an excellent editor when entering activities, but I could not find a way to use it as a viewer, so I ended up removing it from most views. This made clear during implementation that Markdown was more of a technical debt than an asset. In the end I had to write a lot of code to cover edge cases.
+
 ## Architecture
 
 ```
 daily-log-app/
-├── backend/           # Spring Boot 3.3 + Java 17
+├── backend/           # Spring Boot 4.0 + Java 21
 │   ├── src/
 │   └── Dockerfile
-├── frontend/          # React 18 + TypeScript + Tailwind
+├── frontend/          # React 19 + Vite + TypeScript 6 + Tailwind 4 + MDXEditor
 │   ├── src/
 │   └── Dockerfile
-├── docs/              # Project documentation and notes
 ├── docker-compose.yml # PostgreSQL + Redis + backend + frontend
 └── README.md
 ```
 
-**Backend**: Spring Boot 3.3, JPA/Hibernate, Spring Security (cookies), Lombok, H2 (dev) / PostgreSQL (prod/test)
+**Backend**: Spring Boot 4.0.6, JPA/Hibernate 7, Spring Security 7, Jackson 3, Lombok, H2 (dev) / PostgreSQL (prod/test)
 
-**Frontend**: React 18, TypeScript, Tailwind CSS, Radix UI, Lucide icons, MDXEditor
+**Frontend**: React 19, Vite 8, TypeScript 6, Tailwind CSS 4, Radix UI / shadcn/ui, Lucide icons, MDXEditor
 
 ## Quick Start (Development)
 
 ### Prerequisites
-- Java 17+
-- Node.js 18+
-- Maven (or use `mvnw` in the backend directory)
+- Java 21+
+- Node.js 20+
+- Maven
 - Docker Desktop (for prod/test profiles)
 
 ### Run locally (dev profile — H2 in-memory)
@@ -34,8 +62,7 @@ daily-log-app/
 **Terminal 1 — Backend:**
 ```bash
 cd backend
-.\mvnw spring-boot:run -Dspring-boot.run.profiles=dev
-# or omit -Dspring-boot.run.profiles for default H2 config
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 **Terminal 2 — Frontend:**
@@ -45,10 +72,10 @@ npm install
 npm start
 ```
 
-The app is available at `http://localhost:3000`. Backend API is proxied from port 3000 to 8080 by CRA.
+The app is available at `http://localhost:3000`. Backend API is proxied from port 3000 to 8080 by Vite.
 
 ### Default login
-- Username: `ahmed`
+- Username: `user`
 - Password: `password`
 
 ## Run with Docker (prod profile — PostgreSQL + Redis)
@@ -79,8 +106,8 @@ Each plan progresses through 4 phases:
 
 ## Tech Stack
 
-- **Backend**: Spring Boot 3.3.1, Spring Data JPA, Spring Security, H2, PostgreSQL, Redis, Lombok
-- **Frontend**: React 18, TypeScript, Tailwind CSS, Radix UI, Lucide React, MDXEditor, axios, Sentry
+- **Backend**: Spring Boot 4.0.6, Spring Data JPA / Hibernate 7, Spring Security 7, Jackson 3, H2, PostgreSQL, Redis, Lombok
+- **Frontend**: React 19, TypeScript 6, Vite 8, Tailwind CSS 4, Radix UI / shadcn/ui, Lucide React, MDXEditor, Sentry
 - **Infrastructure**: Docker, Docker Compose, Nginx
 
 ## Testing
@@ -88,13 +115,7 @@ Each plan progresses through 4 phases:
 ### Backend
 ```bash
 cd backend
-.\mvnw test
-```
-
-### Frontend
-```bash
-cd frontend
-npm test
+mvn test
 ```
 
 ## Project Structure

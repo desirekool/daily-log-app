@@ -37,14 +37,15 @@ public class DataSeeder {
 
         log.info("Seeding initial data...");
 
-        User ahmed = User.builder()
-            .username("ahmed")
+        User user = User.builder()
+            .username("user")
+            .email("user@example.com")
             .password(passwordEncoder.encode("password"))
-            .email("ahmed@example.com")
             .build();
-        ahmed = userRepository.save(ahmed);
 
-        seedPlan1(ahmed);
+        user = userRepository.save(user);
+
+        seedPlan1(user);
 
         log.info("Seed data created successfully");
     }
