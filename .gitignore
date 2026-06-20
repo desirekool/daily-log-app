@@ -288,6 +288,9 @@ npm-debug.log*
 .yarn/install-state.gz
 .pnp.*
 
+# Project docs
+docs/
+
 # React
 build/
 
